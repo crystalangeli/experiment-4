@@ -1,0 +1,123 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+double* bubbleSort(const double* data, const unsigned int size)
+{
+	unsigned int final = size - 1;
+
+	double* out = new double[size];
+	for (int i = 0; i < size; ++i)
+		out[i] = data[i];
+
+	for (int i = 0; i < final; ++i)
+	{
+		for (int j = 0; j < final - i; ++j)
+		{
+			if (out[j] > out[j + 1])
+			{
+				out[j] += out[j + 1];
+				out[j + 1] = out[j] - out[j + 1];
+				out[j] -= out[j + 1];
+			}
+		}
+	}
+	return out;
+}
+
+double* selectionSort(const double* data, const unsigned int size)
+{
+	double* out = new double[size];
+	for (int i = 0; i < size; ++i)
+		out[i] = data[i];
+
+	for (int i = 0; i < size - 1; ++i)
+	{
+		int min_index = i;
+		for (int j = i + 1; j < size; ++j)
+		{
+			if (out[j] < out[min_index])
+				min_index = j;
+		}
+		double temp = out[i];
+		out[i] = out[min_index];
+		out[min_index] = temp;
+	}
+	return out;
+}
+
+void printArray(const double* arr, const unsigned int size)
+{
+	for (int i = 0; i < size; ++i)
+	{
+		cout << arr[i];
+		if (i + 1 % 10 == 0)
+			cout << '\n';
+		else if (i + 1 != size)
+			cout << ", ";
+	}
+	cout << '\n';
+}
+
+double getInput(int number)
+{
+	string input;
+getData:
+	cout << "Input data number " << number << ": ";
+	cin >> input;
+	try
+	{
+		return stod(input);
+	}
+	catch (exception& e)
+	{
+		cerr << e.what() << '\n';
+		goto getData;
+	}
+}
+
+int main()
+{
+	string input;
+	unsigned int size;
+
+getSize:
+	cout << "Enter array size: ";
+	cin >> input;
+	try
+	{
+		size = stoi(input);
+	}
+	catch (exception& e)
+	{
+		cerr << e.what() << '\n';
+		goto getSize;
+	}
+	cout << '\n';
+	double* data = new double[size];
+	for (int i = 0; i < size; ++i)
+	{
+		data[i] = getInput(i + 1);
+	}
+
+	double* selection = selectionSort(data, size);
+	double* bubble = bubbleSort(data, size);
+
+	cout << "\nUnsorted:\n";
+	printArray(data, size);
+
+	cout << "\nBubble Sorted:\n";
+	printArray(bubble, size);
+
+
+	cout << "\nSelection Sorted:\n";
+	printArray(selection, size);
+
+	delete[] bubble;
+	delete[] selection;
+	delete[] data;
+
+	cin.get();
+	return 0;
+}
