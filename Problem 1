@@ -1,0 +1,118 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+double add(double a, double b)
+{
+	return a + b;
+}
+
+double subtract(double a, double b)
+{
+	return a - b;
+}
+
+double multiply(double a, double b)
+{
+	return a * b;
+}
+
+double divide(double a, double b)
+{
+	if (b == 0)
+		throw "divisor can't be 0\n";
+	return a / b;
+}
+
+double modulo(double a, double b)
+{
+	if (b == 0)
+		throw "divisor can't be 0\n";
+	return fmod(a, b);
+}
+
+int main()
+{
+	char repeat;
+	do
+	{
+		string input;
+		char operation;
+		double a, b, result;
+		double (*func) (double, double);
+
+	begin:
+		cout << "1 - addition\n2 - subtraction\n3 - multiplication\n4 - division\n5 - remainder (modulo)\n\nEnter the operation: ";
+		cin >> operation;
+
+		switch (operation)
+		{
+		case '1':
+			func = &add;
+			break;
+
+		case '2':
+			func = &subtract;
+			break;
+
+		case '3':
+			func = &multiply;
+			break;
+
+		case '4':
+			func = &divide;
+			break;
+
+		case '5':
+			func = &modulo;
+			break;
+
+		default:
+			cerr << "unknown operation\n\n";
+			goto begin;
+		}
+
+		cout << '\n';
+	first:
+		cout << "Enter the first number: ";
+		cin >> input;
+		try
+		{
+			a = stod(input);
+		}
+		catch (exception& e)
+		{
+			cerr << e.what() << '\n';
+			goto first;
+		}
+	second:
+		cout << "Enter the second number: ";
+		cin >> input;
+		try
+		{
+			b = stod(input);
+		}
+		catch (exception& e)
+		{
+			cerr << e.what() << '\n';
+			goto second;
+		}
+
+		try
+		{
+			result = func(a, b);
+			cout << "\nResult: " << result;
+		}
+		catch (const char* err)
+		{
+			cerr << "\nError: " << err;
+		}
+		cout << "\n\nWould you like to repeat? (y/n): ";
+		cin >> repeat;
+	} while (repeat == 'y' || repeat == 'Y');
+
+	cin.get();
+	return 0;
+}
